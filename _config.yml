@@ -4,7 +4,7 @@ description: >-
   A technology blog focused on Security, DevSecOps, AI, and Development.
   Exploring the intersection of technology and cybersecurity.
 baseurl: ""
-url: "https://hijacksecurity.github.io"
+url: "https://blog.hijacksecurity.org"
 
 twitter_username: hijacksecurity
 github_username:  hijacksecurity
