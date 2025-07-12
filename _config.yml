@@ -1,0 +1,43 @@
+title: Hijack Security Blog
+email: hijacksecurity@protonmail.com
+description: >-
+  A technology blog focused on Security, DevSecOps, AI, and Development.
+  Exploring the intersection of technology and cybersecurity.
+baseurl: ""
+url: "https://hijacksecurity.github.io"
+
+twitter_username: hijacksecurity
+github_username:  hijacksecurity
+
+markdown: kramdown
+highlighter: rouge
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+permalink: /:year/:month/:day/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Your Name"
+
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+show_excerpts: true
+paginate: 5
