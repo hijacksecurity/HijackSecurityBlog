@@ -16,6 +16,7 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-paginate
 
 permalink: /:year/:month/:day/:title/
 
@@ -25,7 +26,7 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-      author: "Your Name"
+      author: "Hijack Security"
 
 exclude:
   - .sass-cache/
@@ -40,4 +41,3 @@ exclude:
   - vendor/ruby/
 
 show_excerpts: true
-paginate: 5
