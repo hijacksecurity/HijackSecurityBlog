@@ -1,5 +1,4 @@
 title: Hijack Security Blog
-email: hijacksecurity@protonmail.com
 description: >-
   A technology blog focused on Security, DevSecOps, AI, and Development.
   Exploring the intersection of technology and cybersecurity.
@@ -17,6 +16,10 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-paginate
+
+sass:
+  style: expanded
+  sourcemap: never
 
 permalink: /:year/:month/:day/:title/
 
