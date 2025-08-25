@@ -122,7 +122,7 @@ So if you're having a deep technical discussion, the agents remember more histor
 
 ## Making These Agents Actually DO Stuff
 
-Now here's where I went a bit overboard (in a good way). I didn't want these agents to just talk - I wanted them to actually be able to DO things. So I integrated **Model Context Protocol (MCP)** servers, which basically gives each agent a toolkit of real capabilities. And here's the clever bit - if the fancy MCP tools aren't working, they gracefully fall back to basic command-line tools:
+Now here's where I went a bit overboard (in a good way). I didn't want these agents to just talk - I wanted them to actually be able to DO things. So I integrated **Model Context Protocol (MCP)** servers, which basically gives each agent a toolkit of real capabilities. And here's the clever bit - if the advanced MCP tools aren't working, they gracefully fall back to basic command-line tools:
 
 ```python
 class MCPClient:
@@ -149,7 +149,7 @@ class MCPClient:
             return True
 ```
 
-So like, Gilfoyle can use fancy AWS management tools when everything's working perfectly, but if the MCP server is having a bad day, he just falls back to good old AWS CLI commands. The agents keep working either way, which is pretty handy.
+So like, Gilfoyle can use sophisticated AWS management tools when everything's working perfectly, but if the MCP server is having a bad day, he just falls back to good old AWS CLI commands. The agents keep working either way, which is pretty handy.
 
 Here's what that looks like in the code:
 
@@ -298,7 +298,7 @@ And when someone asks a question that hits everyone's area of expertise, you get
 </div>
 
 ### Making Sure Things Don't Break
-The hybrid MCP/shell tool thing I mentioned? That's my insurance policy. If the fancy tools break, we fall back to basics. Nobody likes a dev team that stops working when one service goes down.
+The hybrid MCP/shell tool thing I mentioned? That's my insurance policy. If the specialized tools break, we fall back to basics. Nobody likes a dev team that stops working when one service goes down.
 
 ## Performance Stuff (Because Speed Matters)
 
