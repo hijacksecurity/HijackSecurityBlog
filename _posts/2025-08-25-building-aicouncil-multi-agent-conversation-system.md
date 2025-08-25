@@ -49,6 +49,13 @@ Alright, so here's where it gets fun. I picked six iconic characters from shows 
 
 And here's the cool part - each agent isn't just a different prompt with a funny name. They have their own trigger words, specialized tools, and different "relevance weights" that make them jump into conversations naturally.
 
+Here's what happens when you drop a bombshell like a $2 billion acquisition with an impossible 30-day migration deadline:
+
+<div style="text-align: center; margin: 20px 0;">
+  <img src="/assets/images/Conversation1.png" alt="AICouncil agents responding to a Google acquisition and 30-day migration challenge" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+  <p style="font-size: 0.9em; color: #666; margin-top: 8px;"><em>The entire team mobilizes when you mention a $2 billion acquisition and 30-day Google migration deadline</em></p>
+</div>
+
 ## The Magic Behind Who Shows Up When
 
 Okay, so here's where things get interesting. Instead of having to @mention agents like you're on Slack, the system actually figures out who should respond based on what you're talking about. I built this **AgentSelector** system that scores each agent's relevance:
@@ -202,6 +209,13 @@ def should_agent_interject(self, agent_id: str, conversation: str, active_agents
 ```
 
 It's honestly pretty cool to watch. You'll be talking to Rick about database performance, and suddenly Elliot jumps in because he noticed you mentioned user data and wants to talk about security implications. Just like real coworkers, but with better response times.
+
+And when things get really intense - like a 3 AM production outage with corrupted backups - the agents don't just talk, they actually use their tools to help diagnose the problem:
+
+<div style="text-align: center; margin: 25px 0;">
+  <img src="/assets/images/Conversation2.png" alt="AICouncil agents responding to a 3 AM production outage with corrupted backups" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+  <p style="font-size: 0.9em; color: #666; margin-top: 8px;"><em>Emergency response mode: agents using real tools to diagnose Kubernetes issues while staying in character</em></p>
+</div>
 
 ## The Nerdy Architecture Stuff (For Those Who Care)
 
