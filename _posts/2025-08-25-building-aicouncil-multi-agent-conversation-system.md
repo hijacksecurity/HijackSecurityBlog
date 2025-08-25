@@ -290,6 +290,13 @@ BUSINESS MODE: Keep it sharp, technical, and brutally honest. Maximum 2 sentence
 
 See that? They're respectful to you (the boss) but can be their full, unfiltered selves with each other. Gilfoyle still gives Rick crap about his code, but he won't be a complete jerk to the person paying the bills.
 
+And when someone asks a question that hits everyone's area of expertise, you get to see each agent's unique perspective and wisdom:
+
+<div style="text-align: center; margin: 25px 0;">
+  <img src="/assets/images/Conversation3.png" alt="AICouncil agents sharing their wisdom about what makes a 10x engineer" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+  <p style="font-size: 0.9em; color: #666; margin-top: 8px;"><em>Each agent brings their unique perspective when a junior dev asks about 10x engineers</em></p>
+</div>
+
 ### Making Sure Things Don't Break
 The hybrid MCP/shell tool thing I mentioned? That's my insurance policy. If the fancy tools break, we fall back to basics. Nobody likes a dev team that stops working when one service goes down.
 
