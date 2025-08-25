@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "I Built a Full-Stack AI Dev Team That Talks in Character"
-date: 2024-08-25 10:00:00 -0000
+date: 2025-08-24 10:00:00 -0000
 categories: ai development python multi-agent fun-projects
 ---
 
