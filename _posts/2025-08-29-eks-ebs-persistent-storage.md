@@ -588,6 +588,6 @@ The persistent storage foundation we built today enables your cluster to handle 
 
 ---
 
-**Coming Next**: [1.4 EKS: Pod Identity - Secure AWS Service Access](/posts/coming-soon) - Enable secure, credential-free AWS service access for your applications.
+**Coming Next**: [1.4 EKS: Pod Identity](/2025/08/29/eks-pod-identity-secure-aws-access/) - Enable secure, credential-free AWS service access for your applications.
 
 *Questions about EBS configuration or storage patterns? Reach out on socials.*

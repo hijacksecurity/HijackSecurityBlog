@@ -505,6 +505,6 @@ The ingress foundation we built today makes your cluster truly production-ready 
 
 ---
 
-**Coming Next**: [1.3 EKS: Persistent Storage with EBS CSI Driver](/posts/coming-soon) - Enable stateful workloads with dynamic volume provisioning.
+**Coming Next**: [1.3 EKS: EBS Persistent Storage](/2025/08/29/eks-ebs-persistent-storage/) - Enable stateful workloads with dynamic volume provisioning.
 
 *Found an issue? Have questions about the ingress configuration? Reach out on socials.*

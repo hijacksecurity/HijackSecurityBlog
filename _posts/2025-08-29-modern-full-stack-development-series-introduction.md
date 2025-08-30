@@ -75,14 +75,14 @@ Base EKS cluster setup with auto-scaling node groups and essential configuration
 #### **[1.2 EKS: Ingress Controller with SSL and Load Balancing](/2025/08/29/eks-ingress-controller-ssl-load-balancing/)**
 AWS Load Balancer Controller implementation with SSL termination and intelligent routing.
 
-#### **1.3 EKS: EBS Storage** *(Coming Soon)*
-Persistent storage configuration using EBS CSI driver.
+#### **[1.3 EKS: EBS Persistent Storage](/2025/08/29/eks-ebs-persistent-storage/)**
+Dynamic volume provisioning using EBS CSI driver for stateful workloads.
 
-#### **1.4 EKS: Pod Identity** *(Coming Soon)*
-Secure AWS service access using EKS Pod Identity.
+#### **[1.4 EKS: Pod Identity](/2025/08/29/eks-pod-identity-secure-aws-access/)**
+Secure AWS service access without storing credentials using EKS Pod Identity.
 
-#### **1.5 EKS: External Secrets** *(Coming Soon)*
-External Secrets Operator integration with AWS Secrets Manager.
+#### **[1.5 EKS: External Secrets](/2025/08/29/eks-external-secrets-automated-secret-management/)**
+Automated secret management with AWS Secrets Manager integration.
 
 #### **1.6 ECR: Docker Image Repository** *(Coming Soon)*
 Container registry setup with image scanning and lifecycle management.

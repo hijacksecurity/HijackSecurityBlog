@@ -3,7 +3,7 @@ layout: post
 title: "1.4 EKS: Pod Identity - Secure AWS Service Access Without Secrets"
 date: 2025-08-29 16:00:00 -0000
 categories: kubernetes eks infrastructure security aws
-tags: ["Modern Full-Stack Development", "Infrastructure", "AWS", "Security"]
+tags: ["Modern Full-Stack Development", "Infrastructure", "AWS", "Kubernetes", "Security"]
 series: "Modern Full-Stack Development"
 series_part: "1.4"
 ---
@@ -517,6 +517,6 @@ The secure AWS access foundation we built today eliminates one of the biggest se
 
 ---
 
-**Coming Next**: [1.5 EKS: External Secrets - Automated Secret Management](/posts/coming-soon) - Integrate AWS Secrets Manager for automated secret rotation and management.
+**Coming Next**: [1.5 EKS: External Secrets](/2025/08/29/eks-external-secrets-automated-secret-management/) - Integrate AWS Secrets Manager for automated secret rotation and management.
 
 *Questions about Pod Identity setup or AWS security patterns? Reach out on socials.*
