@@ -13,4 +13,6 @@ This blog explores topics including:
 - Software development insights
 - Security automation and tooling
 
+For more information about my work and services, visit [Hijack Security](https://www.hijacksecurity.org/).
+
 Stay tuned for in-depth articles, tutorials, and insights from the world of technology security.
