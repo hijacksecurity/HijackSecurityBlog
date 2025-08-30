@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Building Modern Full-Stack Systems: A Real-World Development Series"
+title: "1.0 Building Modern Full-Stack Systems: A Real-World Development Series"
 date: 2025-08-29 10:00:00 -0000
 categories: fullstack kubernetes devops infrastructure series
 tags: ["Modern Full-Stack Development"]
