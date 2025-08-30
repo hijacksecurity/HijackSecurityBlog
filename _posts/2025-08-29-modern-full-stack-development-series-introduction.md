@@ -65,9 +65,9 @@ Some principles we'll explore:
 
 We'll dive deep into specific technologies and approaches, but always in the context of why they were chosen and what problems they solve.
 
-## What We're Actually Building (The Detailed Breakdown)
+## What We're Actually Building
 
-### Phase 1: Infrastructure Foundation
+### Phase 1: The Infrastructure
 
 #### **[1.1 EKS: Kubernetes Base and Node Autoscaling](/2025/08/29/eks-foundation-building-modular-production-cluster/)**
 Base EKS cluster setup with auto-scaling node groups and essential configurations.
@@ -87,13 +87,13 @@ Automated secret management with AWS Secrets Manager integration.
 #### **1.6 ECR: Docker Image Repository** *(Coming Soon)*
 Container registry setup with image scanning and lifecycle management.
 
-### Phase 2: DevSecOps and Automation *(Coming Soon)*
+### Phase 2: DevSecOps *(Coming Soon)*
 
-### Phase 3: Security Implementation *(Coming Soon)*
+### Phase 3: Security *(Coming Soon)*
 
-### Phase 4: Application Development *(Coming Soon)*
+### Phase 4: Development *(Coming Soon)*
 
-### Phase 5: Testing and Monitoring *(Coming Soon)*
+### Phase 5: Testing *(Coming Soon)*
 
 ## Why This Approach Works
 

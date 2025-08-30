@@ -3,7 +3,7 @@ layout: post
 title: "1.2 EKS: Ingress Controller with SSL and Load Balancing"
 date: 2025-08-29 12:00:00 -0000
 categories: kubernetes eks infrastructure security aws
-tags: ["Modern Full-Stack Development", "Infrastructure", "AWS", "Kubernetes"]
+tags: ["Modern Full-Stack Development", "Infrastructure", "AWS", "Kubernetes", "Security"]
 series: "Modern Full-Stack Development"
 series_part: "1.2"
 ---
