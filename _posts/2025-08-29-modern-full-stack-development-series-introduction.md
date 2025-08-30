@@ -3,6 +3,9 @@ layout: post
 title: "Building Modern Full-Stack Systems: A Real-World Development Series"
 date: 2025-08-29 10:00:00 -0000
 categories: fullstack kubernetes devops infrastructure series
+tags: ["Modern Full-Stack Development"]
+series: "Modern Full-Stack Development"
+series_part: "1.0"
 ---
 
 Remember when full-stack development meant knowing HTML, CSS, JavaScript, and maybe a database? Those were simpler times. Now we're juggling containers, orchestration, CI/CD pipelines, infrastructure as code, security 
@@ -33,10 +36,10 @@ before you know what you're securing.
 
 Here's the rough plan:
 
-**Phase 1: Infrastructure Foundation**
+**Phase 1: The Infra**
 We start with EKS as our container orchestration platform, covering the essential components: base cluster setup with auto-scaling nodes, ingress with SSL termination, external secrets management, persistent storage with EBS, and Pod Identity for secure AWS access.
 
-**Phase 2: DevSecOps and Automation** *(Coming Soon)*
+**Phase 2: DevSecOps** *(Coming Soon)*
 CI/CD pipelines, deployment automation, and development workflows.
 
 **Phase 3: Security Implementation** *(Coming Soon)*  

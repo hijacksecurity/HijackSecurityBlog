@@ -4,6 +4,11 @@ layout: default
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
+    {%- if page.series -%}
+    <div class="post-series" style="background: #f0f0f0; display: inline-block; padding: 4px 12px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; color: #666;">
+      📚 {{ page.series }}{% if page.series_part %} • Part {{ page.series_part }}{% endif %}
+    </div>
+    {%- endif -%}
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
     <p class="post-meta">
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
@@ -12,6 +17,14 @@ layout: default
       </time>
       {%- if page.author -%}
         • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
+      {%- endif -%}
+      {%- if page.tags and page.tags.size > 0 -%}
+        <br>
+        <span class="post-tags" style="margin-top: 8px; display: inline-block;">
+          {%- for tag in page.tags -%}
+            <span style="background: #007ACC; color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px; margin-right: 5px;">{{ tag }}</span>
+          {%- endfor -%}
+        </span>
       {%- endif -%}
     </p>
   </header>
