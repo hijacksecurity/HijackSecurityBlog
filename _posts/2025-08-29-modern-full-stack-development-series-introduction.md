@@ -72,8 +72,8 @@ We'll dive deep into specific technologies and approaches, but always in the con
 #### **[1.1 EKS: Kubernetes Base and Node Autoscaling](/2025/08/29/eks-foundation-building-modular-production-cluster/)**
 Base EKS cluster setup with auto-scaling node groups and essential configurations.
 
-#### **1.2 EKS: Ingress with SSL** *(Coming Soon)*
-AWS Load Balancer Controller implementation with SSL termination and routing.
+#### **[1.2 EKS: Ingress Controller with SSL and Load Balancing](/2025/08/29/eks-ingress-controller-ssl-load-balancing/)**
+AWS Load Balancer Controller implementation with SSL termination and intelligent routing.
 
 #### **1.3 EKS: EBS Storage** *(Coming Soon)*
 Persistent storage configuration using EBS CSI driver.

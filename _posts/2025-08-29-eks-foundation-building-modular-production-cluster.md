@@ -3,7 +3,7 @@ layout: post
 title: "1.1 EKS: Kubernetes Base and Node Autoscaling"
 date: 2025-08-29 11:00:00 -0000
 categories: kubernetes eks infrastructure security aws
-tags: ["Modern Full-Stack Development", "Infrastructure"]
+tags: ["Modern Full-Stack Development", "Infrastructure", "AWS"]
 series: "Modern Full-Stack Development"
 series_part: "1.1"
 ---
@@ -629,6 +629,6 @@ The modular foundation we built today makes adding these capabilities straightfo
 
 ---
 
-**Coming Next**: [EKS Ingress: Modern Load Balancing and SSL Management](/posts/coming-soon) - Transform your private cluster into a secure, public-facing platform.
+**Coming Next**: [1.2 EKS: Ingress Controller with SSL and Load Balancing](/2025/08/29/eks-ingress-controller-ssl-load-balancing/) - Transform your private cluster into a secure, public-facing platform.
 
 *Questions about the implementation? Spotted an issue with the configuration? Reach out to me on socials.*
