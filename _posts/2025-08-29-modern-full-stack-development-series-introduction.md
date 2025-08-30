@@ -69,7 +69,7 @@ We'll dive deep into specific technologies and approaches, but always in the con
 
 ### Phase 1: Infrastructure Foundation
 
-#### **[1.1 EKS: Foundation](/2025/08/29/eks-foundation-building-modular-production-cluster/)**
+#### **[1.1 EKS: Kubernetes Base and Node Autoscaling](/2025/08/29/eks-foundation-building-modular-production-cluster/)**
 Base EKS cluster setup with auto-scaling node groups and essential configurations.
 
 #### **1.2 EKS: Ingress with SSL** *(Coming Soon)*

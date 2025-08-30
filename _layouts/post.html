@@ -22,7 +22,7 @@ layout: default
         <br>
         <span class="post-tags" style="margin-top: 8px; display: inline-block;">
           {%- for tag in page.tags -%}
-            <span style="background: #007ACC; color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px; margin-right: 5px;">{{ tag }}</span>
+            {%- include tag-colors.html tag=tag -%}
           {%- endfor -%}
         </span>
       {%- endif -%}

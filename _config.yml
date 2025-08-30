@@ -4,6 +4,7 @@ description: >-
   Exploring the intersection of technology and cybersecurity.
 baseurl: ""
 url: "https://blog.hijacksecurity.org"
+show_excerpts: false
 
 twitter_username: hijacksecurity
 github_username:  hijacksecurity
@@ -22,6 +23,9 @@ sass:
   sourcemap: never
 
 permalink: /:year/:month/:day/:title/
+
+include:
+  - _pages
 
 defaults:
   - scope:
@@ -42,5 +46,3 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
-
-show_excerpts: true

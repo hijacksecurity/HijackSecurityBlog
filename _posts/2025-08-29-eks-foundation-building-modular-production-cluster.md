@@ -3,7 +3,7 @@ layout: post
 title: "1.1 EKS: Kubernetes Base and Node Autoscaling"
 date: 2025-08-29 11:00:00 -0000
 categories: kubernetes eks infrastructure security aws
-tags: ["Modern Full-Stack Development", "EKS"]
+tags: ["Modern Full-Stack Development", "Infrastructure"]
 series: "Modern Full-Stack Development"
 series_part: "1.1"
 ---

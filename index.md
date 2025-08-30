@@ -21,8 +21,12 @@ layout: default
             {{ post.title | escape }}
           </a>
         </h3>
-        {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
+        {%- if post.tags and post.tags.size > 0 -%}
+        <div class="post-tags" style="margin-top: -10px; margin-bottom: 10px;">
+          {%- for tag in post.tags -%}
+            {%- include tag-colors.html tag=tag -%}
+          {%- endfor -%}
+        </div>
         {%- endif -%}
       </li>
       {%- endfor -%}
