@@ -3,6 +3,7 @@ layout: post
 title: "I Built a Full-Stack AI Dev Team That Talks in Character"
 date: 2025-08-24 10:00:00 -0000
 categories: ai development python multi-agent fun-projects
+tags: ["AI", "Development"]
 ---
 
 So, you know how we're all constantly switching between different AI tools for different tasks? Like, one for coding, another for infrastructure questions, maybe a third for security stuff? Well, I got tired of that whole dance and decided to build something way more fun: **AICouncil** - basically a full-stack dev team made of AI agents who actually stay in character and can do real work.

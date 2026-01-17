@@ -2,3 +2,56 @@
 ---
 
 @import "minima";
+
+// Tags styling
+.post-tags {
+  margin: 0.5em 0 1em 0;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #e8e8e8;
+  color: #333;
+  padding: 0.2em 0.6em;
+  margin: 0.2em 0.3em 0.2em 0;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+// Series styling
+.post-series {
+  color: #666;
+  font-size: 0.95em;
+  margin: 0.3em 0;
+}
+
+.series-navigation {
+  margin-top: 3em;
+  padding: 1.5em;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  border-left: 4px solid #2a7ae2;
+}
+
+.series-navigation h3 {
+  margin-top: 0;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.series-navigation ul {
+  margin-bottom: 0;
+  padding-left: 1.2em;
+}
+
+.series-navigation li {
+  margin: 0.4em 0;
+}
+
+.series-navigation li.current {
+  font-weight: bold;
+}
+
+.series-navigation li.current a {
+  color: #333;
+}

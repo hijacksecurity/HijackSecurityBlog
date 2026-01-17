@@ -4,6 +4,11 @@ layout: default
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
+    {%- if page.series -%}
+    <div class="post-series" style="background: #f0f0f0; display: inline-block; padding: 4px 12px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; color: #666;">
+      {{ page.series }}{% if page.series_part %} | Part {{ page.series_part }}{% endif %}
+    </div>
+    {%- endif -%}
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
     <p class="post-meta">
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
@@ -13,12 +18,34 @@ layout: default
       {%- if page.author -%}
         • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
       {%- endif -%}
+      {%- if page.tags and page.tags.size > 0 -%}
+        <br>
+        <span class="post-tags" style="margin-top: 8px; display: inline-block;">
+          {%- for tag in page.tags -%}
+            {%- include tag-colors.html tag=tag -%}
+          {%- endfor -%}
+        </span>
+      {%- endif -%}
     </p>
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
     {{ content }}
   </div>
+
+  {%- if page.series -%}
+  <div class="series-navigation">
+    <h3>More in this series: {{ page.series }}</h3>
+    <ul>
+    {%- assign series_posts = site.posts | where: "series", page.series | sort: "series_part" -%}
+    {%- for post in series_posts -%}
+      <li{% if post.url == page.url %} class="current"{% endif %}>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      </li>
+    {%- endfor -%}
+    </ul>
+  </div>
+  {%- endif -%}
 
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
