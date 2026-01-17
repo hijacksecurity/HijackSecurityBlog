@@ -1,0 +1,38 @@
+{% comment %}
+  Tag color mapping - assigns consistent colors to tags
+{% endcomment %}
+
+{% assign tag_colors = "EKS Infrastructure Series:#6366f1,Infrastructure:#ec4899,AI:#10b981,Security:#f59e0b,DevOps:#8b5cf6,Kubernetes:#326ce5,EKS:#ff9900,AWS:#ff9900,Docker:#0db7ed,Python:#3776ab,JavaScript:#f7df1e,TypeScript:#3178c6,React:#61dafb,Node.js:#339933,Git:#f05032,CI/CD:#2088c6,Monitoring:#e6522c,Database:#336791,API:#009688,Testing:#00d084,Performance:#dc2626,Architecture:#7c3aed,Cloud:#0ea5e9,Automation:#22c55e,ML:#ff6b6b,DevSecOps:#fbbf24,Containers:#0db7ed,ECR:#ff9900,Development:#8b5cf6" | split: "," %}
+
+{% assign tag_slug = include.tag | slugify %}
+{% assign tag_color = "#007ACC" %}
+{% assign tag_text_color = "white" %}
+
+{% for mapping in tag_colors %}
+  {% assign parts = mapping | split: ":" %}
+  {% assign mapped_tag = parts[0] %}
+  {% assign mapped_color = parts[1] %}
+  {% if mapped_tag == include.tag %}
+    {% assign tag_color = mapped_color %}
+    {% comment %} Determine text color based on background brightness {% endcomment %}
+    {% if mapped_color == "#f7df1e" or mapped_color == "#61dafb" or mapped_color == "#fbbf24" or mapped_color == "#10b981" or mapped_color == "#22c55e" %}
+      {% assign tag_text_color = "#1f2937" %}
+    {% endif %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<a href="/tags/#{{ tag_slug }}"
+   style="background: {{ tag_color }};
+          color: {{ tag_text_color }};
+          padding: 3px 10px;
+          border-radius: 4px;
+          font-size: 12px;
+          margin-right: 5px;
+          text-decoration: none;
+          display: inline-block;
+          font-weight: 500;
+          transition: opacity 0.2s;
+          line-height: 1.2;"
+   onmouseover="this.style.opacity='0.85'"
+   onmouseout="this.style.opacity='1'">{{ include.tag }}</a>

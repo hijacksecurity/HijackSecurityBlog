@@ -23,6 +23,9 @@ sass:
 
 permalink: /:year/:month/:day/:title/
 
+include:
+  - _pages
+
 defaults:
   - scope:
       path: ""

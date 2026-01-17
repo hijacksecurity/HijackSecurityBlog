@@ -1,0 +1,174 @@
+---
+layout: default
+title: Tags
+permalink: /tags/
+---
+
+<div class="tags-page">
+  <h1>Posts by Tag</h1>
+
+  <!-- Collect all tags -->
+  {% assign all_tags = "" | split: "" %}
+  {% for post in site.posts %}
+    {% assign all_tags = all_tags | concat: post.tags %}
+  {% endfor %}
+  {% assign all_tags = all_tags | uniq | sort %}
+
+  <!-- Tag color mapping -->
+  {% assign tag_color_map = "EKS Infrastructure Series:#6366f1|Infrastructure:#ec4899|AI:#10b981|Security:#f59e0b|DevOps:#8b5cf6|Kubernetes:#326ce5|EKS:#ff9900|AWS:#ff9900|Docker:#0db7ed|Python:#3776ab|JavaScript:#f7df1e|TypeScript:#3178c6|React:#61dafb|Node.js:#339933|Git:#f05032|CI/CD:#2088c6|Monitoring:#e6522c|Database:#336791|API:#009688|Testing:#00d084|Performance:#dc2626|Architecture:#7c3aed|Cloud:#0ea5e9|Automation:#22c55e|ML:#ff6b6b|DevSecOps:#fbbf24|Containers:#0db7ed|ECR:#ff9900|Development:#8b5cf6" %}
+
+  <!-- Display all tags as clickable buttons -->
+  <div class="tag-cloud" style="margin: 20px 0;">
+    <a href="/tags/"
+       onclick="showAllPosts(); return false;"
+       style="background: #6b7280;
+              color: white;
+              padding: 3px 10px;
+              border-radius: 4px;
+              text-decoration: none;
+              display: inline-block;
+              margin: 4px;
+              font-weight: 500;
+              transition: opacity 0.2s;
+              font-size: 12px;
+              line-height: 1.2;
+              cursor: pointer;"
+       onmouseover="this.style.opacity='0.85'"
+       onmouseout="this.style.opacity='1'">All Posts</a>
+    {% for tag in all_tags %}
+      {% assign tag_color = "#007ACC" %}
+      {% assign color_mappings = tag_color_map | split: "|" %}
+      {% for mapping in color_mappings %}
+        {% assign parts = mapping | split: ":" %}
+        {% if parts[0] == tag %}
+          {% assign tag_color = parts[1] %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+      <a href="#{{ tag | slugify }}"
+         onclick="filterByTag('{{ tag | slugify }}'); return false;"
+         style="background: {{ tag_color }};
+                color: white;
+                padding: 3px 10px;
+                border-radius: 4px;
+                text-decoration: none;
+                display: inline-block;
+                margin: 4px;
+                font-weight: 500;
+                transition: all 0.2s;
+                font-size: 12px;
+                line-height: 1.2;
+                cursor: pointer;"
+         onmouseover="this.style.opacity='0.85'"
+         onmouseout="this.style.opacity='1'">{{ tag }}</a>
+    {% endfor %}
+  </div>
+
+  <!-- Display posts grouped by tag -->
+  {% for tag in all_tags %}
+    <div id="{{ tag | slugify }}" class="tag-section" style="margin-top: 40px;">
+      <h2 style="border-bottom: 2px solid #007ACC; padding-bottom: 10px;">{{ tag }}</h2>
+      <ul class="post-list">
+        {% for post in site.posts %}
+          {% if post.tags contains tag %}
+            <li style="margin: 15px 0;">
+              <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+              <h3 style="margin-top: 5px;">
+                <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+              </h3>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+  .tag-cloud a:hover {
+    opacity: 0.8;
+  }
+
+  .tag-section {
+    display: none;
+  }
+
+  .tag-section.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+
+<script>
+  function filterByTag(tagSlug) {
+    // Hide all tag sections
+    document.querySelectorAll('.tag-section').forEach(section => {
+      section.classList.remove('active');
+    });
+
+    // Show only the selected tag section
+    const selectedSection = document.getElementById(tagSlug);
+    if (selectedSection) {
+      selectedSection.classList.add('active');
+    }
+
+    // Update active button styling
+    updateActiveButton(tagSlug);
+  }
+
+  function showAllPosts() {
+    // Show all tag sections
+    document.querySelectorAll('.tag-section').forEach(section => {
+      section.classList.add('active');
+    });
+
+    // Update active button styling
+    updateActiveButton('all');
+  }
+
+  function updateActiveButton(activeTag) {
+    // Reset all buttons
+    document.querySelectorAll('.tag-cloud a').forEach(button => {
+      button.style.opacity = '0.7';
+      button.style.transform = 'scale(0.95)';
+    });
+
+    // Highlight active button
+    if (activeTag === 'all') {
+      document.querySelector('.tag-cloud a[href="/tags/"]').style.opacity = '1';
+      document.querySelector('.tag-cloud a[href="/tags/"]').style.transform = 'scale(1)';
+    } else {
+      const activeButton = document.querySelector(`.tag-cloud a[href="#${activeTag}"]`);
+      if (activeButton) {
+        activeButton.style.opacity = '1';
+        activeButton.style.transform = 'scale(1)';
+      }
+    }
+  }
+
+  // Initialize - show all posts on load
+  window.addEventListener('DOMContentLoaded', function() {
+    // Check if there's a hash in the URL
+    if (window.location.hash) {
+      const tagSlug = window.location.hash.substring(1);
+      filterByTag(tagSlug);
+    } else {
+      showAllPosts();
+    }
+  });
+
+  // Handle browser back/forward buttons
+  window.addEventListener('hashchange', function() {
+    if (window.location.hash) {
+      const tagSlug = window.location.hash.substring(1);
+      filterByTag(tagSlug);
+    } else {
+      showAllPosts();
+    }
+  });
+</script>
