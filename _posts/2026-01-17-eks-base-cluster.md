@@ -23,6 +23,84 @@ By the end of this article, you'll have:
 - **Cluster Autoscaler** for automatic node scaling
 - **IAM OIDC provider** for secure service account authentication
 
+## What EKS Actually Provides
+
+Before diving in, it's worth understanding what you're paying for with EKS versus running Kubernetes yourself.
+
+### The Shared Responsibility Model
+
+<div class="mermaid">
+graph TB
+    subgraph AWS Manages
+        CP[Control Plane]
+        ETCD[etcd]
+        API[API Server]
+        SCHED[Scheduler]
+        CM[Controller Manager]
+        UP[Upgrades & Patches]
+        HA[High Availability]
+    end
+    subgraph You Manage
+        NODES[Worker Nodes]
+        APPS[Applications]
+        ADDONS[Add-ons]
+        NET[Networking Config]
+        SEC[Security Policies]
+        MON[Monitoring Setup]
+    end
+</div>
+
+| Component | Self-Managed K8s | EKS |
+|-----------|------------------|-----|
+| **Control plane servers** | You provision, patch, scale | AWS manages completely |
+| **etcd cluster** | You back up, maintain, monitor | AWS handles (3 AZs, encrypted) |
+| **API server availability** | You configure HA, load balancing | 99.95% SLA, auto-scaled |
+| **Kubernetes upgrades** | You plan, test, execute | One command, managed rollout |
+| **Security patches** | You monitor CVEs, apply patches | AWS patches automatically |
+| **Worker nodes** | You manage | You manage |
+| **Applications** | You deploy | You deploy |
+
+### What You Don't Have to Do with EKS
+
+Running Kubernetes yourself means:
+
+- **Provisioning control plane VMs** - At least 3 for HA, sized appropriately
+- **Installing and configuring etcd** - Distributed consensus is hard to get right
+- **Setting up TLS certificates** - For API server, kubelet, etcd communication
+- **Configuring the API server** - Dozens of flags for auth, admission controllers, feature gates
+- **Managing etcd backups** - Regular snapshots, tested restore procedures
+- **Handling control plane upgrades** - Careful sequencing, rollback plans
+- **Monitoring control plane health** - API server latency, etcd disk I/O, scheduler queue depth
+
+With EKS, all of this is handled. You get a Kubernetes API endpoint that just works.
+
+### What You Still Manage
+
+EKS doesn't eliminate all operational work. You're responsible for:
+
+- **Worker nodes** - EC2 instances that run your pods (though managed node groups help)
+- **Cluster add-ons** - CNI, CSI drivers, ingress controllers, monitoring
+- **Application deployments** - Your actual workloads
+- **Security configuration** - RBAC, network policies, pod security
+- **Cost optimization** - Right-sizing, spot instances, scaling policies
+
+### The Real Value
+
+The $73/month EKS control plane cost buys you:
+
+- **Time savings** - No control plane maintenance, focus on applications
+- **Reliability** - AWS's operational expertise, multi-AZ by default
+- **Security** - Automatic patches, AWS security team monitoring
+- **Integration** - Native IAM, CloudWatch, VPC integration
+- **Support** - AWS support covers EKS issues
+
+For comparison, running your own HA control plane on EC2:
+- 3x t3.medium instances: ~$90/month
+- Plus your time managing them
+- Plus the risk of misconfiguration
+
+EKS is genuinely cheaper when you factor in operational overhead.
+
 ## Why eksctl?
 
 We're using `eksctl` instead of Terraform, CloudFormation, or the AWS Console. Here's why:

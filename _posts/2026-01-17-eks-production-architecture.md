@@ -3,7 +3,7 @@ layout: post
 title: "1.8 EKS: Production Architecture and Operations Guide"
 date: 2026-01-17 18:00:00 -0000
 categories: kubernetes eks infrastructure aws architecture
-tags: ["EKS Infrastructure Series", "Infrastructure", "AWS", "Kubernetes", "EKS", "Architecture", "Production"]
+tags: ["EKS Infrastructure Series", "Infrastructure", "AWS", "Kubernetes", "EKS", "Architecture"]
 series: "EKS Infrastructure Series"
 series_part: "1.8"
 ---
@@ -203,13 +203,19 @@ Here's where everything comes together. Different application types need differe
 - EBS Storage (stateless - no persistent volumes)
 
 **Architecture**:
-```
-Internet → ALB (Ingress) → Service → Deployment (3+ replicas)
-                                          ↓
-                                    External Secrets → Secrets Manager
-                                          ↓
-                                    Pod Identity → AWS Services (optional)
-```
+
+<div class="mermaid">
+graph LR
+    subgraph EKS Cluster
+        ALB[ALB] --> SVC[Service]
+        SVC --> DEP[Deployment<br/>3+ replicas]
+        DEP --> ES[External Secrets]
+        DEP --> PI[Pod Identity]
+    end
+    INT[Internet] --> ALB
+    ES --> SM[Secrets Manager]
+    PI --> AWS[AWS Services]
+</div>
 
 **Key Decisions**:
 - Set CPU/memory requests based on load testing
@@ -262,11 +268,16 @@ spec:
 - Headless Service for stable network identity
 
 **Architecture**:
-```
-App Pods → Headless Service → StatefulSet (ordered pod names)
-                                    ↓
-                              PersistentVolumeClaim → EBS Volume
-```
+
+<div class="mermaid">
+graph TB
+    subgraph EKS Cluster
+        APP[App Pods] --> HS[Headless Service]
+        HS --> SS[StatefulSet]
+        SS --> PVC[PersistentVolumeClaim]
+    end
+    PVC --> EBS[EBS Volume]
+</div>
 
 **Key Decisions**:
 - Use `volumeBindingMode: WaitForFirstConsumer` to ensure volume and pod are in same AZ
@@ -323,11 +334,16 @@ spec:
 - No Ingress (not internet-facing)
 
 **Architecture**:
-```
-SQS Queue ← Pod Identity ← Worker Deployment (autoscaled)
-                                ↓
-                          External Secrets → Secrets Manager
-```
+
+<div class="mermaid">
+graph TB
+    subgraph EKS Cluster
+        WD[Worker Deployment<br/>autoscaled] --> ES[External Secrets]
+        WD --> PI[Pod Identity]
+    end
+    ES --> SM[Secrets Manager]
+    PI --> SQS[SQS Queue]
+</div>
 
 **Key Decisions**:
 - Scale based on queue depth, not CPU (use KEDA or custom metrics)
@@ -365,11 +381,16 @@ SQS Queue ← Pod Identity ← Worker Deployment (autoscaled)
 - CloudWatch for logs
 
 **Architecture**:
-```
-CronJob (schedule) → Job → Pod (runs to completion)
-                             ↓
-                       Pod Identity → AWS Services
-```
+
+<div class="mermaid">
+graph TB
+    subgraph EKS Cluster
+        CJ[CronJob] --> JOB[Job]
+        JOB --> POD[Pod]
+        POD --> PI[Pod Identity]
+    end
+    PI --> AWS[AWS Services]
+</div>
 
 **Key Decisions**:
 - Set `concurrencyPolicy: Forbid` to prevent overlapping runs
@@ -409,18 +430,20 @@ spec:
 - Multiple namespaces for organization
 
 **Architecture**:
-```
-Internet → ALB → Frontend (Deployment)
-                      ↓
-              API Gateway / Service
-                      ↓
-            Backend API (Deployment)
-              ↓           ↓
-        PostgreSQL    Redis Cache
-        (StatefulSet) (StatefulSet)
-              ↑
-        Worker (Deployment) ← SQS
-```
+
+<div class="mermaid">
+graph TB
+    subgraph EKS Cluster
+        ALB[ALB] --> FE[Frontend]
+        FE --> SVC[Internal Service]
+        SVC --> API[Backend API]
+        API --> PG[PostgreSQL<br/>StatefulSet]
+        API --> RD[Redis Cache<br/>StatefulSet]
+        PG --> WK[Worker]
+    end
+    INT[Internet] --> ALB
+    SQS[SQS] --> WK
+</div>
 
 **Namespace Organization**:
 ```
@@ -603,32 +626,69 @@ aws eks describe-addon-versions --addon-name vpc-cni --kubernetes-version 1.XX
 
 ## What's Next
 
-This series covered the foundational EKS infrastructure. Here's what to explore next:
+This series covered the foundational EKS infrastructure. Here's what to explore next, with how to install each:
 
-**Deployment Automation**:
-- ArgoCD or Flux for GitOps
-- GitHub Actions for CI/CD pipelines
-- Helm for application packaging
+### Deployment Automation
 
-**Advanced Networking**:
-- Service mesh (Istio, Linkerd) for mTLS and observability
-- Network policies for microsegmentation
-- AWS PrivateLink for private service access
+| Tool | Purpose | Install Method |
+|------|---------|----------------|
+| **ArgoCD** | GitOps continuous delivery | Helm: `helm install argocd argo/argo-cd` |
+| **Flux** | GitOps toolkit | CLI: `flux bootstrap github` |
+| **GitHub Actions** | CI/CD pipelines | No cluster install (runs in GitHub) |
 
-**Advanced Scaling**:
-- Karpenter for intelligent node provisioning
-- KEDA for event-driven autoscaling
-- Cluster Autoscaler tuning
+### Advanced Scaling
 
-**Security Hardening**:
-- OPA Gatekeeper for policy enforcement
-- Falco for runtime security
-- AWS GuardDuty EKS integration
+| Tool | Purpose | Install Method |
+|------|---------|----------------|
+| **Karpenter** | Intelligent node provisioning | Helm: `helm install karpenter oci://public.ecr.aws/karpenter/karpenter` |
+| **KEDA** | Event-driven pod autoscaling | Helm: `helm install keda kedacore/keda` |
+| **Metrics Server** | Pod metrics for HPA | Helm: `helm install metrics-server metrics-server/metrics-server` |
 
-**Cost Management**:
-- Kubecost for allocation and optimization
-- Spot instance interruption handling
-- Reserved capacity planning
+### Networking & Service Mesh
+
+| Tool | Purpose | Install Method |
+|------|---------|----------------|
+| **Istio** | Service mesh, mTLS | CLI: `istioctl install` |
+| **Linkerd** | Lightweight service mesh | CLI: `linkerd install \| kubectl apply -f -` |
+| **Calico** | Network policies | Helm: `helm install calico projectcalico/tigera-operator` |
+
+### Security
+
+| Tool | Purpose | Install Method |
+|------|---------|----------------|
+| **OPA Gatekeeper** | Policy enforcement | Helm: `helm install gatekeeper gatekeeper/gatekeeper` |
+| **Falco** | Runtime threat detection | Helm: `helm install falco falcosecurity/falco` |
+| **GuardDuty EKS** | AWS threat detection | AWS Console: Enable in GuardDuty settings |
+| **Trivy Operator** | Vulnerability scanning | Helm: `helm install trivy-operator aqua/trivy-operator` |
+
+### Observability (Beyond CloudWatch)
+
+| Tool | Purpose | Install Method |
+|------|---------|----------------|
+| **Prometheus** | Metrics collection | Helm: `helm install prometheus prometheus-community/prometheus` |
+| **Grafana** | Dashboards | Helm: `helm install grafana grafana/grafana` |
+| **Loki** | Log aggregation | Helm: `helm install loki grafana/loki-stack` |
+
+### Cost Management
+
+| Tool | Purpose | Install Method |
+|------|---------|----------------|
+| **Kubecost** | Cost allocation | Helm: `helm install kubecost kubecost/cost-analyzer` |
+| **AWS Cost Explorer** | AWS-level costs | AWS Console (no cluster install) |
+
+Most tools use Helm charts. Add the repos first:
+```bash
+# Common Helm repos
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo add kedacore https://kedacore.github.io/charts
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
+helm repo add falcosecurity https://falcosecurity.github.io/charts
+helm repo add aqua https://aquasecurity.github.io/helm-charts
+helm repo add kubecost https://kubecost.github.io/cost-analyzer
+helm repo update
+```
 
 ## Series Summary
 
