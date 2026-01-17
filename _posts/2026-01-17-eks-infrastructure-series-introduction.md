@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "1.0 EKS Infrastructure Series: Building Production Kubernetes on AWS"
-date: 2025-08-29 10:00:00 -0000
+date: 2026-01-17 10:00:00 -0000
 categories: kubernetes eks infrastructure aws
 tags: ["EKS Infrastructure Series", "Infrastructure", "AWS", "Kubernetes"]
 series: "EKS Infrastructure Series"
@@ -18,12 +18,14 @@ We're building a complete EKS environment with these components:
 
 | Part | Component | Purpose |
 |------|-----------|---------|
-| 1.1 | [ECR Setup](/2025/08/29/eks-ecr-container-registry/) | Container registry for storing Docker images |
-| 1.2 | EKS Base Cluster | Kubernetes control plane with auto-scaling nodes |
-| 1.3 | Ingress Controller | SSL termination and load balancing with ALB |
-| 1.4 | EBS Storage | Persistent volumes for stateful workloads |
-| 1.5 | Pod Identity | Secure AWS API access without stored credentials |
-| 1.6 | External Secrets | Automated secret sync from AWS Secrets Manager |
+| 1.1 | [ECR Setup](/2026/01/17/eks-ecr-container-registry/) | Container registry for storing Docker images |
+| 1.2 | [EKS Base Cluster](/2026/01/17/eks-base-cluster/) | Kubernetes control plane with auto-scaling nodes |
+| 1.3 | [Ingress Controller](/2026/01/17/eks-ingress-controller/) | SSL termination and load balancing with ALB |
+| 1.4 | [EBS Storage](/2026/01/17/eks-ebs-storage/) | Persistent volumes for stateful workloads |
+| 1.5 | [Pod Identity](/2026/01/17/eks-pod-identity/) | Secure AWS API access without stored credentials |
+| 1.6 | [External Secrets](/2026/01/17/eks-external-secrets/) | Automated secret sync from AWS Secrets Manager |
+| 1.7 | [CloudWatch Monitoring](/2026/01/17/eks-cloudwatch-monitoring/) | Container Insights dashboards and log collection |
+| 1.8 | [Production Architecture](/2026/01/17/eks-production-architecture/) | Operations guide, production checklist, architecture patterns |
 
 Each article is self-contained with working examples. You can follow along sequentially or jump to specific topics.
 
@@ -37,6 +39,8 @@ By the end of this series, you'll have infrastructure that:
 - Provides persistent storage for databases and stateful apps
 - Accesses AWS services securely without storing credentials
 - Syncs secrets automatically from AWS Secrets Manager
+- Monitors cluster health with dashboards and logs
+- Follows proven architecture patterns for different workload types
 
 ## Prerequisites
 
@@ -82,8 +86,8 @@ A few guiding principles for this infrastructure:
 
 The first article covers setting up Amazon ECR - your private container registry. We'll configure image scanning, lifecycle policies, and the IAM permissions needed to push and pull images.
 
-**Next**: [1.1 ECR: Container Registry Setup](/2025/08/29/eks-ecr-container-registry/)
+**Next**: [1.1 ECR: Container Registry Setup](/2026/01/17/eks-ecr-container-registry/)
 
 ---
 
-*This series is a work in progress. Articles will be published as they're completed.*
+*Questions about this series? Reach out on socials.*

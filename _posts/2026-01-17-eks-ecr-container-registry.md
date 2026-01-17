@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "1.1 ECR: Setting Up Your Container Registry"
-date: 2025-08-29 11:00:00 -0000
+date: 2026-01-17 11:00:00 -0000
 categories: kubernetes eks infrastructure aws containers
 tags: ["EKS Infrastructure Series", "Infrastructure", "AWS", "Kubernetes", "Containers", "ECR"]
 series: "EKS Infrastructure Series"
@@ -519,7 +519,7 @@ You now have:
 
 With ECR configured, we can build the EKS cluster that will pull images from this registry. In the next article, we'll create the base cluster with auto-scaling nodes and proper security configuration.
 
-**Next**: [1.2 EKS Base Cluster - Kubernetes Foundation with Auto-scaling](/2025/08/29/eks-base-cluster/) *(Coming Soon)*
+**Next**: [1.2 EKS Base Cluster - Kubernetes Foundation with Auto-scaling](/2026/01/17/eks-base-cluster/)
 
 ---
 
