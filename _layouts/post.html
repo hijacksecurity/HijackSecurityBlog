@@ -1,12 +1,25 @@
 ---
 layout: default
 ---
+<!-- Reading progress bar -->
+<div class="reading-progress-container">
+  <div class="reading-progress-bar"></div>
+</div>
+
+<!-- Back to top button -->
+<button class="back-to-top" aria-label="Back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+
+<div class="post-layout-wrapper">
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
     {%- if page.series -%}
-    <div class="post-series" style="background: #f0f0f0; display: inline-block; padding: 4px 12px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; color: #666;">
-      {{ page.series }}{% if page.series_part %} | Part {{ page.series_part }}{% endif %}
+    <div class="post-series-wrapper">
+      {%- include series-badge.html series=page.series part=page.series_part large=true -%}
     </div>
     {%- endif -%}
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
@@ -47,9 +60,115 @@ layout: default
   </div>
   {%- endif -%}
 
+  {%- include post-sharing.html -%}
+
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
   {%- endif -%}
 
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
+
+<nav class="toc-nav" aria-label="Table of contents">
+  <div class="toc-header">On this page</div>
+  <ul class="toc-list"></ul>
+</nav>
+</div>
+
+<script>
+(function() {
+  const tocNav = document.querySelector('.toc-nav');
+  const tocList = document.querySelector('.toc-list');
+  const article = document.querySelector('.post-content');
+
+  if (!tocNav || !tocList || !article) return;
+
+  // Get only h2 headings for minimal TOC
+  const headings = article.querySelectorAll('h2');
+
+  // Hide TOC if fewer than 3 sections
+  if (headings.length < 3) {
+    tocNav.style.display = 'none';
+    return;
+  }
+
+  // Build TOC
+  headings.forEach((heading, index) => {
+    // Ensure heading has an ID
+    if (!heading.id) {
+      heading.id = 'section-' + index;
+    }
+
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = '#' + heading.id;
+    a.textContent = heading.textContent;
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.pushState(null, null, '#' + heading.id);
+    });
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+
+  // Scroll spy
+  const tocLinks = tocList.querySelectorAll('a');
+
+  function updateActiveLink() {
+    let currentIndex = 0;
+    const scrollPos = window.scrollY + 120;
+
+    headings.forEach((heading, index) => {
+      if (heading.offsetTop <= scrollPos) {
+        currentIndex = index;
+      }
+    });
+
+    tocLinks.forEach((link, index) => {
+      link.classList.toggle('active', index === currentIndex);
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveLink, { passive: true });
+  updateActiveLink();
+})();
+
+// Reading progress bar and back-to-top button
+(function() {
+  const progressBar = document.querySelector('.reading-progress-bar');
+  const backToTop = document.querySelector('.back-to-top');
+  const article = document.querySelector('.post-content');
+
+  if (!progressBar || !backToTop || !article) return;
+
+  function updateProgress() {
+    const articleTop = article.offsetTop;
+    const articleHeight = article.offsetHeight;
+    const windowHeight = window.innerHeight;
+    const scrollY = window.scrollY;
+
+    // Calculate progress through the article
+    const start = articleTop - windowHeight / 2;
+    const end = articleTop + articleHeight - windowHeight / 2;
+    const progress = Math.min(Math.max((scrollY - start) / (end - start), 0), 1);
+
+    progressBar.style.height = (progress * 100) + '%';
+
+    // Show/hide back to top button
+    if (scrollY > 400) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  }
+
+  // Back to top click handler
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+})();
+</script>

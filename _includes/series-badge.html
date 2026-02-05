@@ -1,0 +1,14 @@
+{%- if include.series -%}
+<span class="series-badge{% if include.large %} series-badge--large{% endif %}">
+  <span class="series-badge__icon" title="Part of a series">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+    </svg>
+  </span>
+  <span class="series-badge__name">{{ include.series }}</span>
+  {%- if include.part -%}
+  <span class="series-badge__part">{{ include.part }}</span>
+  {%- endif -%}
+</span>
+{%- endif -%}

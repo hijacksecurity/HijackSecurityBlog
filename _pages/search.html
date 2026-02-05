@@ -1,0 +1,381 @@
+---
+layout: default
+title: Search
+permalink: /search/
+---
+
+<div class="search-page">
+  <h1>Search</h1>
+
+  <div class="search-container">
+    <div class="search-input-wrapper">
+      <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="M21 21l-4.35-4.35"></path>
+      </svg>
+      <input type="text" id="search-input" class="search-input" placeholder="Search posts..." autocomplete="off" autofocus>
+      <button id="search-clear" class="search-clear" aria-label="Clear search" style="display: none;">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="search-results" class="search-results">
+    <p class="search-hint">Type to search through all posts...</p>
+  </div>
+</div>
+
+<script>
+(function() {
+  let posts = [];
+
+  const searchInput = document.getElementById('search-input');
+  const searchResults = document.getElementById('search-results');
+  const searchClear = document.getElementById('search-clear');
+
+  // Load search data
+  fetch('{{ "/search.json" | relative_url }}')
+    .then(response => response.json())
+    .then(data => {
+      posts = data;
+      // Check for URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get('q');
+      if (query) {
+        searchInput.value = query;
+        performSearch(query);
+      } else {
+        showAllPosts();
+      }
+    })
+    .catch(err => {
+      console.error('Failed to load search data:', err);
+      searchResults.innerHTML = '<p class="search-error">Failed to load search data. Please try refreshing the page.</p>';
+    });
+
+  function performSearch(query) {
+    if (!query.trim()) {
+      showAllPosts();
+      return;
+    }
+
+    const q = query.toLowerCase();
+    const results = posts.filter(post => {
+      const title = (post.title || '').toLowerCase();
+      const content = (post.content || '').toLowerCase();
+      const tags = (post.tags || []).join(' ').toLowerCase();
+      const series = (post.series || '').toLowerCase();
+      return title.includes(q) || content.includes(q) || tags.includes(q) || series.includes(q);
+    });
+
+    displayResults(results, query);
+  }
+
+  function displayResults(results, query) {
+    if (results.length === 0) {
+      searchResults.innerHTML = `
+        <p class="search-no-results">No posts found for "<strong>${escapeHtml(query)}</strong>"</p>
+        <p class="search-suggestion">Try different keywords or browse <a href="{{ "/posts/" | relative_url }}">all posts</a>.</p>
+      `;
+      return;
+    }
+
+    const html = `
+      <p class="search-count">${results.length} post${results.length === 1 ? '' : 's'} found</p>
+      <ul class="search-results-list">
+        ${results.map(post => `
+          <li class="search-result-item">
+            <a href="${post.url}" class="search-result-link">
+              <span class="search-result-title">${highlightMatch(post.title, query)}</span>
+              <span class="search-result-date">${post.date}</span>
+            </a>
+            <p class="search-result-excerpt">${highlightMatch(post.excerpt, query)}</p>
+            ${post.tags && post.tags.length ? `
+              <div class="search-result-tags">
+                ${post.tags.map(tag => `<span class="search-tag">${tag}</span>`).join('')}
+              </div>
+            ` : ''}
+          </li>
+        `).join('')}
+      </ul>
+    `;
+    searchResults.innerHTML = html;
+  }
+
+  function showAllPosts() {
+    if (posts.length === 0) {
+      searchResults.innerHTML = '<p class="search-hint">Loading posts...</p>';
+      return;
+    }
+
+    const html = `
+      <p class="search-count">All ${posts.length} posts</p>
+      <ul class="search-results-list">
+        ${posts.map(post => `
+          <li class="search-result-item">
+            <a href="${post.url}" class="search-result-link">
+              <span class="search-result-title">${escapeHtml(post.title)}</span>
+              <span class="search-result-date">${post.date}</span>
+            </a>
+            <p class="search-result-excerpt">${escapeHtml(post.excerpt)}</p>
+            ${post.tags && post.tags.length ? `
+              <div class="search-result-tags">
+                ${post.tags.map(tag => `<span class="search-tag">${tag}</span>`).join('')}
+              </div>
+            ` : ''}
+          </li>
+        `).join('')}
+      </ul>
+    `;
+    searchResults.innerHTML = html;
+  }
+
+  function highlightMatch(text, query) {
+    if (!text || !query) return escapeHtml(text || '');
+    const escaped = escapeHtml(text);
+    const terms = query.trim().split(/\s+/);
+    let result = escaped;
+    terms.forEach(term => {
+      const regex = new RegExp(`(${escapeRegex(term)})`, 'gi');
+      result = result.replace(regex, '<mark>$1</mark>');
+    });
+    return result;
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function escapeRegex(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  // Event listeners
+  let debounceTimer;
+  searchInput.addEventListener('input', function() {
+    const query = this.value;
+    searchClear.style.display = query ? 'flex' : 'none';
+
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      performSearch(query);
+      // Update URL without reloading
+      const url = new URL(window.location);
+      if (query) {
+        url.searchParams.set('q', query);
+      } else {
+        url.searchParams.delete('q');
+      }
+      history.replaceState(null, '', url);
+    }, 150);
+  });
+
+  searchClear.addEventListener('click', function() {
+    searchInput.value = '';
+    searchInput.focus();
+    this.style.display = 'none';
+    showAllPosts();
+    const url = new URL(window.location);
+    url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+  });
+
+  // Handle keyboard shortcut
+  document.addEventListener('keydown', function(e) {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+    if (e.key === 'Escape' && document.activeElement === searchInput) {
+      searchInput.blur();
+    }
+  });
+})();
+</script>
+
+<style>
+.search-page h1 {
+  margin-top: 0 !important;
+  margin-bottom: 2rem !important;
+  padding-bottom: 1rem;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  border-bottom: 3px solid var(--accent-primary);
+}
+
+.search-container {
+  margin-bottom: 2rem;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem 3rem;
+  font-size: 1.1rem;
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-primary);
+  border-radius: 12px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-clear {
+  position: absolute;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-clear:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.search-results {
+  min-height: 200px;
+}
+
+.search-hint,
+.search-no-results,
+.search-error {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 2rem;
+}
+
+.search-suggestion {
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.search-count {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.search-results-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-result-item {
+  padding: 1.25rem;
+  margin: 0 -1.25rem;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+  background: var(--bg-hover);
+}
+
+.search-result-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+}
+
+.search-result-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.search-result-item:hover .search-result-title {
+  color: var(--accent-primary);
+}
+
+.search-result-date {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.search-result-excerpt {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.6;
+}
+
+.search-result-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.search-tag {
+  font-family: ui-monospace, monospace;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  border-radius: 4px;
+  border: 1px solid var(--border-primary);
+}
+
+/* Highlight matches */
+.search-result-title mark,
+.search-result-excerpt mark {
+  background: rgba(59, 130, 246, 0.3);
+  color: inherit;
+  padding: 0.1em 0.2em;
+  border-radius: 3px;
+}
+
+@media (max-width: 600px) {
+  .search-result-link {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .search-result-date {
+    order: -1;
+  }
+}
+</style>

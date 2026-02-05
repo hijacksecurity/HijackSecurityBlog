@@ -33,26 +33,38 @@
       </div>
     </nav>
 
-    <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
-      <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="5"></circle>
-        <line x1="12" y1="1" x2="12" y2="3"></line>
-        <line x1="12" y1="21" x2="12" y2="23"></line>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-        <line x1="1" y1="12" x2="3" y2="12"></line>
-        <line x1="21" y1="12" x2="23" y2="12"></line>
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-      </svg>
-      <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-      </svg>
-    </button>
+    <div class="header-right">
+      <div class="nav-search">
+        <svg class="nav-search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="M21 21l-4.35-4.35"></path>
+        </svg>
+        <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search..." autocomplete="off">
+        <div id="nav-search-results" class="nav-search-results"></div>
+      </div>
+
+      <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+        <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
   </div>
 </header>
 
 <script>
+  // Theme toggle
   document.addEventListener('DOMContentLoaded', function() {
     const toggle = document.querySelector('.theme-toggle');
     if (toggle) {
@@ -63,7 +75,6 @@
         html.setAttribute('data-theme', next);
         localStorage.setItem('theme', next);
 
-        // Re-initialize mermaid with new theme
         if (typeof mermaid !== 'undefined') {
           mermaid.initialize({
             startOnLoad: false,
@@ -72,5 +83,91 @@
         }
       });
     }
+
+    // Search functionality
+    const searchInput = document.getElementById('nav-search-input');
+    const searchResults = document.getElementById('nav-search-results');
+    let posts = [];
+
+    // Load search data
+    fetch('{{ "/search.json" | relative_url }}')
+      .then(response => response.json())
+      .then(data => { posts = data; })
+      .catch(err => console.error('Failed to load search data:', err));
+
+    function performSearch(query) {
+      if (!query.trim() || posts.length === 0) {
+        searchResults.innerHTML = '';
+        searchResults.classList.remove('visible');
+        return;
+      }
+
+      const q = query.toLowerCase();
+      const results = posts.filter(post => {
+        const title = (post.title || '').toLowerCase();
+        const content = (post.content || '').toLowerCase();
+        const tags = (post.tags || []).join(' ').toLowerCase();
+        const series = (post.series || '').toLowerCase();
+        return title.includes(q) || content.includes(q) || tags.includes(q) || series.includes(q);
+      });
+
+      if (results.length === 0) {
+        searchResults.innerHTML = '<div class="nav-search-empty">No results found</div>';
+        searchResults.classList.add('visible');
+        return;
+      }
+
+      const html = results.slice(0, 8).map(post => `
+        <a href="${post.url}" class="nav-search-item">
+          <span class="nav-search-title">${escapeHtml(post.title)}</span>
+          <span class="nav-search-date">${post.date}</span>
+        </a>
+      `).join('');
+
+      searchResults.innerHTML = html + (results.length > 8 ? `<a href="{{ "/search/" | relative_url }}?q=${encodeURIComponent(query)}" class="nav-search-more">View all ${results.length} results</a>` : '');
+      searchResults.classList.add('visible');
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    let debounceTimer;
+    searchInput.addEventListener('input', function() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => performSearch(this.value), 150);
+    });
+
+    searchInput.addEventListener('focus', function() {
+      if (this.value.trim()) performSearch(this.value);
+    });
+
+    // Close results when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-search')) {
+        searchResults.classList.remove('visible');
+      }
+    });
+
+    // Enter to go to search page
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && this.value.trim()) {
+        window.location.href = '{{ "/search/" | relative_url }}?q=' + encodeURIComponent(this.value.trim());
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.target.matches('input, textarea')) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+      if (e.key === 'Escape') {
+        searchInput.blur();
+        searchResults.classList.remove('visible');
+      }
+    });
   });
 </script>
