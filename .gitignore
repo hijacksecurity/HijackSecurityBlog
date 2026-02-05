@@ -216,3 +216,6 @@ _site/
 .jekyll-metadata
 vendor/
 Gemfile.lock
+
+# VS Code
+.vscode/

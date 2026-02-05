@@ -2,12 +2,63 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Theme detection - runs early to prevent flash -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
   {%- seo -%}
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+  <link rel="stylesheet" href="{{ "/assets/css/custom.css" | relative_url }}">
   {%- feed_meta -%}
   {%- if jekyll.environment == 'production' and site.google_analytics -%}
     {%- include google-analytics.html -%}
   {%- endif -%}
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  <script>mermaid.initialize({startOnLoad:true, theme:'neutral'});</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const theme = document.documentElement.getAttribute('data-theme');
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: theme === 'dark' ? 'dark' : 'neutral'
+      });
+
+      // Add copy buttons to code blocks
+      document.querySelectorAll('div.highlighter-rouge').forEach(function(codeBlock) {
+        const copyButton = document.createElement('button');
+        copyButton.className = 'code-copy-btn';
+        copyButton.textContent = 'Copy';
+        copyButton.setAttribute('aria-label', 'Copy code to clipboard');
+
+        copyButton.addEventListener('click', function() {
+          const code = codeBlock.querySelector('code');
+          const text = code ? code.textContent : '';
+
+          navigator.clipboard.writeText(text).then(function() {
+            copyButton.textContent = 'Copied!';
+            copyButton.classList.add('copied');
+
+            setTimeout(function() {
+              copyButton.textContent = 'Copy';
+              copyButton.classList.remove('copied');
+            }, 2000);
+          }).catch(function(err) {
+            console.error('Failed to copy:', err);
+            copyButton.textContent = 'Error';
+            setTimeout(function() {
+              copyButton.textContent = 'Copy';
+            }, 2000);
+          });
+        });
+
+        codeBlock.appendChild(copyButton);
+      });
+    });
+  </script>
 </head>
