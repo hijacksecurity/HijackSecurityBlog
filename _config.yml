@@ -47,3 +47,8 @@ exclude:
   - vendor/ruby/
 
 show_excerpts: true
+
+header_pages:
+  - _pages/posts.html
+  - _pages/tags.html
+  - about.md

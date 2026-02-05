@@ -1,0 +1,133 @@
+---
+layout: default
+title: Posts
+permalink: /posts/
+---
+
+<div class="posts-page">
+  <h1>All Posts</h1>
+
+  {% assign posts_by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+
+  {% for year in posts_by_year %}
+    <div class="year-section">
+      <h2 class="year-heading">{{ year.name }}</h2>
+
+      {% assign posts_by_month = year.items | group_by_exp: "post", "post.date | date: '%B'" %}
+
+      {% for month in posts_by_month %}
+        <div class="month-section">
+          <h3 class="month-heading">{{ month.name }}</h3>
+
+          <ul class="posts-list">
+            {% for post in month.items %}
+              <li class="post-item">
+                <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %d" }}</time>
+                <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+                {% if post.series %}
+                  <span class="series-badge">{{ post.series }}</span>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+/* h1 styling is now in custom.css for consistency */
+
+.year-section {
+  margin-bottom: 3rem;
+}
+
+.year-heading {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--accent-primary);
+}
+
+.month-section {
+  margin-bottom: 2rem;
+  margin-left: 1rem;
+}
+
+.month-heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.posts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  margin: 0 -1rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.post-item:hover {
+  background: var(--bg-hover);
+}
+
+.post-item time {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  min-width: 3.5rem;
+  flex-shrink: 0;
+}
+
+.post-item a {
+  flex: 1;
+  color: var(--text-primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.post-item a:hover {
+  color: var(--accent-primary);
+}
+
+.series-badge {
+  font-family: ui-monospace, monospace;
+  font-size: 0.65rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  border-radius: 4px;
+  border: 1px solid var(--border-primary);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .post-item {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .post-item time {
+    min-width: auto;
+  }
+
+  .series-badge {
+    margin-left: auto;
+  }
+}
+</style>
