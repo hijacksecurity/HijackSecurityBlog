@@ -43,6 +43,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    # Pages deployment is only valid from the default branch; on pull_request
+    # this job cannot reach the github-pages environment and always fails.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
