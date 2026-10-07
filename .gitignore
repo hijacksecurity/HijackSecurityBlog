@@ -219,3 +219,12 @@ Gemfile.lock
 
 # VS Code
 .vscode/
+
+# Series planning notes (not published)
+_planning/
+
+# Local-only: unpublished drafts, browser screenshots, Claude config, macOS
+_drafts/
+.playwright-mcp/
+.claude/
+.DS_Store
