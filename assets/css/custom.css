@@ -746,6 +746,7 @@ div.language-md::before { content: 'markdown'; color: #7d8590; }
 
 div.language-plaintext::before,
 div.language-text::before { content: 'output'; color: #7d8590; }
+div.language-codeowners::before { content: 'codeowners'; color: #7d8590; }
 
 div.language-c::before { content: 'c'; color: #555555; }
 div.language-cpp::before { content: 'c++'; color: #f34b7d; }
